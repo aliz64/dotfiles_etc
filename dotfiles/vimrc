@@ -1,0 +1,97 @@
+"###############################################################################
+" VIM config file
+"###############################################################################
+
+" line wrapping settings
+set wrap linebreak nolist formatoptions-=t
+
+" enable mouse mode with compatibility for older terminals
+set mouse=a
+if has("mouse_sgr")
+  set ttymouse=sgr
+else
+  set ttymouse=xterm2
+end
+
+" other visual settings
+set cursorline hlsearch cc=80 number relativenumber showtabline=2 visualbell
+
+" use indentation to fold, but don't enable by default
+set foldmethod=indent
+set nofoldenable
+
+" colors/theme - assumed `monokai` is installed in `~/.vim/colors`
+colorscheme monokai
+set term=screen-256color
+
+" enable syntax highlighting, from file beginning
+syntax on
+autocmd BufEnter * :syntax sync fromstart
+
+" highlight trailing whitespaces as errors
+autocmd BufWinEnter * match Error /\s\+$/
+autocmd InsertEnter * match Error /\s\+\%#\@<!$/
+autocmd InsertLeave * match Error /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" 5x cursor movement with Shift+[H,J]
+map <S-k> 5k
+map <S-j> 5j
+
+" Tabs with Shift+[H/L]
+nnoremap H gT
+nnoremap L gt
+
+"###############################################################################
+" Settings for indentation
+"###############################################################################
+
+let g:python_recommended_style = 0
+
+" Only do this part when compiled with support for autocommands
+if has("autocmd")
+    " Use filetype detection and file-based automatic indenting.
+    filetype plugin indent on
+
+    " Use actual tab chars in Makefiles.
+    autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+endif
+
+" For everything else, use a tab width of 2 space chars.
+set tabstop=2                 " Tab i.e. `\t` is displayed as 2 spaces
+set expandtab softtabstop=2   " Write 2 spaces when pressed the Tab key
+set shiftwidth=2              " Indents will have a width of 2
+
+"###############################################################################
+" Settings for spelling-check
+"###############################################################################
+
+nm <F8> :setlocal spell! spelllang=en_us<CR>
+imap <F8> <C-o>:setlocal spell! spelllang=en_us<CR>
+highlight clear SpellBad
+highlight SpellBad term=standout ctermfg=1 term=underline cterm=underline
+highlight clear SpellCap
+highlight SpellCap term=underline cterm=underline
+highlight clear SpellRare
+highlight SpellRare term=underline cterm=underline
+highlight clear SpellLocal
+highlight SpellLocal term=underline cterm=underline
+let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'
+
+"###############################################################################
+" yank settings + OSC52
+"###############################################################################
+
+" copy to system clipboard instead of vim
+if has("clipboard")
+  if has("mac")
+    set clipboard=unnamed " macOS seems to need the * register
+  else
+    set clipboard=unnamedplus " use the + register
+  endif
+endif
+
+" TODO: add OSC52 support
+
+"###############################################################################
+"###############################################################################

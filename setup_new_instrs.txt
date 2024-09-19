@@ -1,0 +1,41 @@
+################################################################################
+Setup instructions for a new physical system [MacOS, Linux]
+################################################################################
+
+1) Clone this repo (i.e. `dotfiles_etc`) to `~/`
+
+2) Install the `Monaco for Powerline` font, .otf available in this repo.
+
+3) Terminal Setup
+  - Use iterm2 for MacOS, some other OSC52 compatible terminal on Linux
+  - Enable OSC52 for the terminal emulator
+  - Change terminal emulator font to `Monaco for Powerline`
+  - On MacOS, use `az.itermcolors` to set terminal colorscheme
+  - TODO: On linux, need to decide on a terminal emulator, save colorscheme
+
+4) Shell setup:
+  - Install oh-my-zsh
+  - Change default shell to ZSH
+  - In native `~/.zshrc` change oh-my-zsh theme to `agnoster`
+  - In native `~/.zshrc` add `source ~/dotfiles_etc/dotfiles/zshrc`
+
+5) Setup Tmux, link config
+  - Tested: MacOS tmux 3.5a, install/update if necessary
+  - `ln -s ~/dotfiles_etc/dotfiles/tmux.conf ~/.tmux.conf`
+
+6) Setup Vim, link config
+  - Tested: MacOS VIM 9.0, install/update if necessary
+  - `ln -s ~/dotfiles_etc/dotfiles/vimrc ~/.vimrc`
+  - `mkdir -p ~/.vim/colors`
+  - `ln -s ~/dotfiles_etc/monokai.vim ~/.vim/colors/monokai.vim`
+
+################################################################################
+Setup other tools
+################################################################################
+MacOS
+- install homwbrew package manager i.e. `brew`
+- brew install ripgrep i.e. `rg`
+- brew install coreutils (includes `gls`, for example)
+
+################################################################################
+################################################################################

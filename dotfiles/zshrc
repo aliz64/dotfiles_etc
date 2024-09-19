@@ -1,0 +1,131 @@
+################################################################################
+# Some PATH related stuff
+################################################################################
+
+if [ "$(uname)" = "Darwin" ]; then
+  ######################## Specific to MacOS ########################
+
+  ###################################################################
+else
+  ######################## Specific to Linux ########################
+
+  # GLPATH is needed by Makefiles in CUDA samples
+  export GLPATH=/usr/lib/x86_64-linux-gnu
+
+  # Add cuda libs and bins to LD_LIBRARY_PATH and PATH respectively.
+  export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+  export PATH=/usr/local/cuda/bin:$PATH
+
+  ###################################################################
+fi
+
+################################################################################
+# Some custom settings
+################################################################################
+
+export EDITOR=vi
+set -o vi
+bindkey '^R' history-incremental-search-backward
+bindkey '^O' accept-line-and-down-history
+
+export PYTHONDONTWRITEBYTECODE=1
+
+# oh-my-zsh seems to fuck up ls colors on macOS (since dircolors not found)
+# fix this by deleting LS_COLORS from the env, since I use the default anyways
+# also delete LSCOLORS since we don't non-GNU ls anyways...
+unset LS_COLORS # used by GNU ls
+unset LSCOLORS # used by BSD/Mac ls, but I don't use this
+
+# Always use GNU ls, even on Mac (needs to be installed - brew coreututils e.g.)
+if [ "$(uname)" = "Darwin" ]; then
+  alias ls="gls --color=tty -1 --group-directories-first"
+else
+  alias ls="ls --color=tty -1 --group-directories-first"
+fi
+
+################################################################################
+# Some custom commands
+################################################################################
+
+basher() {
+  vi ~/.zshrc
+}
+
+basherr() {
+  vi ~/dotfiles_etc/dotfiles/zshrc # i.e. this file
+}
+
+basher-source() {
+  source ~/.zshrc
+}
+
+alltexter() {
+  vi *txt -p
+}
+
+ttad() {
+  tmux attach -dt $1
+}
+
+frg() {
+  find . | rg $1
+}
+
+rgh() {
+  history | rg $1
+}
+
+mvr() {
+  mv $2 $1
+}
+
+grandom() {
+    eval "echo $RANDOM | md5sum | head -c 20; echo"
+}
+
+gitremdel() {
+    git remote prune origin
+    git branch -vv | grep "gone" | awk '{print $1}' | xargs git branch -D
+}
+
+if [ "$(uname)" = "Darwin" ]; then
+  ######################## Specific to MacOS ########################
+
+  ###################################################################
+else
+  ######################## Specific to Linux ########################
+
+  lib_installed() {
+    /sbin/ldconfig \
+      -N -v $(sed 's/:/ /' <<< $LD_LIBRARY_PATH) 2>/dev/null | grep $1;
+  }
+
+  check() {
+    lib_installed \
+      $1 && echo "$1 is installed" || echo "ERROR: $1 is NOT installed";
+  }
+
+  ramu() {
+      watch -n 0 "echo; free -h; echo;"
+  }
+
+  nnn() {
+    watch -n 0 "nvidia-smi"
+  }
+
+  # XXX: specific to system76 laptop
+  gpurun() {
+      __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia "$@"
+  }
+
+  # XXX: specific to system76 laptop
+  mhz() {
+      watch -n 0 "echo; uptime -p; echo; cat /proc/cpuinfo | rg MHz; echo; \
+      sensors system76_acpi-acpi-0; echo; nvidia-smi; free -h; echo; df -h"
+  }
+  ###################################################################
+fi
+
+################################################################################
+################################################################################
