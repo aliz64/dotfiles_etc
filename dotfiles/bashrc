@@ -1,0 +1,55 @@
+################################################################################
+# Custom bashrc to be imported by user .bashrc
+################################################################################
+export EDITOR='vi'
+export VISUAL='vi'
+set -o vi
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-command 'Control-r: reverse-search-history'
+bind -m vi-command 'Control-s: forward-search-history'
+bind -m vi-command 'Control-o: operate-and-get-next'
+
+bind -m vi-insert 'Control-l: clear-screen'
+bind -m vi-insert 'Control-r: reverse-search-history'
+bind -m vi-insert 'Control-s: forward-search-history'
+bind -m vi-insert 'Control-o: operate-and-get-next'
+
+
+################################################################################
+function basher() {
+  vi ~/.bashrc
+}
+
+function basherr() {
+  vi -p ~/dotfiles_etc/dotfiles/*hrc
+}
+
+function basher-source() {
+  source ~/.bashrc
+}
+
+function ttad() {
+  tmux attach -dt $1
+}
+
+function rgh() {
+  history | rg $1
+}
+
+function frg() {
+  find . | rg $1
+}
+
+function drmi() {
+  docker image ls -a | awk '{print $3}' | xargs docker image rm -f
+}
+
+function drmc() {
+  docker container ls -a | awk '{print $1}' | xargs docker container rm -f
+}
+
+function docklean() {
+  drmc;
+  drmi;
+  rm /var/tmp/docker*;
+}

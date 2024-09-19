@@ -1,0 +1,89 @@
+" vim config file
+
+set wrap
+set linebreak
+set nolist  " list disables linebreak
+set formatoptions-=t
+
+set visualbell
+set cursorline
+
+set hlsearch
+
+syntax on
+autocmd BufEnter * :syntax sync fromstart
+
+set mouse=a
+set number relativenumber
+colorscheme monokai
+set cc=80
+set showtabline=2
+
+set foldmethod=indent
+set nofoldenable
+
+set term=screen-256color
+
+" Fixes problems with mouse over SSH in some terminals
+if has("mouse_sgr")
+  set ttymouse=sgr
+else
+  set ttymouse=xterm2
+end
+
+autocmd BufWinEnter * match Error /\s\+$/
+autocmd InsertEnter * match Error /\s\+\%#\@<!$/
+autocmd InsertLeave * match Error /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" 5x cursor movement with Shift+[H,J]
+map <S-k> 5k
+map <S-j> 5j
+
+" Scrolling with Shift+[arrow keys]
+"map <S-down> <C-e>
+"map <S-up> <C-y>
+
+" Tabs with Shift+[H/L]
+nnoremap H gT
+nnoremap L gt
+
+vnoremap <leader>ty y<cr>:call system("tmux load-buffer -", @0)<cr>gv
+nnoremap <leader>tp :let @0 = system("tmux save-buffer -")<cr>"0p<cr>g;4
+
+" ###################### Setting for indentation ###################
+
+let g:python_recommended_style = 0
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+    " Use filetype detection and file-based automatic indenting.
+    filetype plugin indent on
+
+    " Use actual tab chars in Makefiles.
+    autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+endif
+
+" For everything else, use a tab width of 4 space chars.
+set tabstop=2       " The width of a TAB is set to 4.
+                    " Still it is a \t. It is just that
+                    " Vim will interpret it to be having a width of 4.
+set shiftwidth=2    " Indents will have a width of 4.
+set softtabstop=2   " Sets the number of columns for a TAB.
+set expandtab       " Expand TABs to spaces.
+
+let g:python_recommended_style = 0
+
+" ##################################################################
+
+nm <F8> :setlocal spell! spelllang=en_us<CR>
+imap <F8> <C-o>:setlocal spell! spelllang=en_us<CR>
+highlight clear SpellBad
+highlight SpellBad term=standout ctermfg=1 term=underline cterm=underline
+highlight clear SpellCap
+highlight SpellCap term=underline cterm=underline
+highlight clear SpellRare
+highlight SpellRare term=underline cterm=underline
+highlight clear SpellLocal
+highlight SpellLocal term=underline cterm=underline
+let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'

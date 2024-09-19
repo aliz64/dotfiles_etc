@@ -1,0 +1,87 @@
+################################################################################
+# Custom zshrc to be imported by user .zshrc
+################################################################################
+# oh-my-zsh seems to fuck up LS_COLORS on macOS (since dircolors not found)
+# fix this by deleting LS_COLORS from the env, and fallback to default
+# also delete LSCOLORS since we do not use non-GNU ls
+unset LS_COLORS
+unset LSCOLORS
+
+export EDITOR='vi'
+export VISUAL='vi'
+set -o vi
+bindkey '^R' history-incremental-search-backward
+bindkey '^O' accept-line-and-down-history
+
+export PYTHONDONTWRITEBYTECODE=1
+
+################################################################################
+basher() {
+  vi ~/.zshrc
+}
+
+basherr() {
+  vi -p ~/dotfiles_etc/dotfiles/*hrc
+}
+
+basher-source() {
+  source ~/.zshrc
+}
+
+ttad() {
+  tmux attach -dt $1
+}
+
+rgh() {
+  history | rg $1
+}
+
+frg() {
+  find . | rg $1
+}
+
+grandom() {
+    eval "echo $RANDOM | md5sum | head -c 20; echo"
+}
+
+gitremdel() {
+    git remote prune origin
+    git branch -vv | grep "gone" | awk '{print $1}' | xargs git branch -D
+}
+
+revtunnel64() {
+  ssh -X -N -f -R "$1":localhost:22 aliz64@alizartash.com
+}
+
+################################################################################
+if [ "$(uname)" = "Darwin" ]; then # Mac OS X specific
+  alias ls="gls --color=tty -1 --group-directories-first"
+else # Linux specific
+  alias ls="ls --color=tty -1 --group-directories-first"
+
+  lib_installed() {
+    /sbin/ldconfig -N -v $(sed 's/:/ /' <<< $LD_LIBRARY_PATH) 2>/dev/null | rg $1;
+  }
+
+  check() {
+    lib_installed $1 && echo "$1 is installed" || echo "ERROR: $1 is NOT installed";
+  }
+
+  mhz() {
+      watch -n 0 "echo; uptime -p; echo; cat /proc/cpuinfo | rg MHz; echo; \
+      sensors system76_acpi-acpi-0; echo; nvidia-smi; free -h; echo; df -h"
+  }
+
+  ramu() {
+      watch -n 0 "echo; free -h; echo;"
+  }
+
+  gpurun() {
+      __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia "$@"
+  }
+
+  nnn() {
+    watch -n 0 "nvidia-smi"
+  }
+fi
+################################################################################
