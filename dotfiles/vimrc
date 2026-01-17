@@ -3,7 +3,14 @@
 "###############################################################################
 
 " line wrapping settings
-set wrap linebreak nolist formatoptions-=t
+set wrap linebreak formatoptions-=t
+set list listchars=tab:»·,leadmultispace:\ ┊
+
+" numbered matches
+set shortmess-=S
+
+" some vim versions do not have this by default
+set scrolloff=0
 
 " enable mouse mode with compatibility for older terminals
 set mouse=a
@@ -17,7 +24,7 @@ end
 set cursorline hlsearch cc=80 number relativenumber showtabline=2 visualbell
 
 " use indentation to fold, but don't enable by default
-set foldmethod=indent
+set foldmethod=syntax
 set nofoldenable
 
 " colors/theme - assumed `monokai` is installed in `~/.vim/colors`
@@ -82,16 +89,20 @@ let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'
 " yank settings + OSC52
 "###############################################################################
 
+let is_ssh_session = (exists('SSH_CLIENT') || exists('$SSH_TTY) ||
+  \ exists('$SSH_CONNECTION'))
+
 " copy to system clipboard instead of vim
-if has("clipboard")
+if has("clipboard") && !is_ssh_session
   if has("mac")
     set clipboard=unnamed " macOS seems to need the * register
   else
     set clipboard=unnamedplus " use the + register
   endif
+else
+  source ~/dotfiles_etc/osc52.vim
+  vmap <C-c> y:call SendViaOSC52(getreg('"'))<cr>
 endif
-
-" TODO: add OSC52 support
 
 "###############################################################################
 "###############################################################################
