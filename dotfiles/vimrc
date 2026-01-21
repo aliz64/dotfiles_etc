@@ -89,7 +89,7 @@ let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'
 " yank settings + OSC52
 "###############################################################################
 
-let is_ssh_session = (exists('SSH_CLIENT') || exists('$SSH_TTY) ||
+let is_ssh_session = (exists('$SSH_CLIENT') || exists('$SSH_TTY') ||
   \ exists('$SSH_CONNECTION'))
 
 " copy to system clipboard instead of vim
