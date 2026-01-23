@@ -127,7 +127,7 @@ call s:h("SpellRare",     { "fg": s:aqua,                             "format": 
 call s:h("SpellLocal",    { "fg": s:pink,                             "format": "underline" })
 
 " misc
-call s:h("SpecialKey",    { "fg": s:pink })
+call s:h("SpecialKey",    { "fg": s:lightblack2 })
 call s:h("Title",         { "fg": s:yellow })
 call s:h("Directory",     { "fg": s:aqua })
 

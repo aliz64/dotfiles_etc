@@ -11,7 +11,7 @@ Setup instructions for a new physical system [MacOS, Linux]
   - Enable OSC52 for the terminal emulator
   - Change terminal emulator font to `Monaco for Powerline`
   - On MacOS, use `az.itermcolors` to set terminal colorscheme
-  - TODO: On linux, need to decide on a terminal emulator, save colorscheme
+  - On Ubuntu GNOME terminal use grey on black and solarized
 
 4) Shell setup:
   - Install oh-my-zsh
